@@ -4,6 +4,7 @@ import com.java.fileparser.implementation.EligibilityImporterImpl;
 import com.java.fileparser.implementation.MemberExporterImpl;
 import com.java.fileparser.implementation.MemberImporterImpl;
 import com.java.fileparser.utils.EligibilityUtils;
+import com.java.fileparser.utils.FileUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -15,19 +16,9 @@ public abstract class MemberFileConverter {
 
     public void convert(File membersFile, File eligibilityFile, File outputFile) throws IOException {
 
-        if (!membersFile.exists())
-            throw new IOException("File " + membersFile.getName() + " not found!");
-        System.out.println("File " + membersFile.getName() + " found");
-
-        if (!eligibilityFile.exists()) {
-            throw new IOException("File " + eligibilityFile.getName() + " not found!");
-        }
-        System.out.println("File " + eligibilityFile.getName() + " found");
-
-        if (!outputFile.exists()) {
-            throw new IOException("File " + outputFile.getName() + " not found!");
-        }
-        System.out.println("File " + outputFile.getName() + " found");
+        FileUtils.checkIfFileExists(membersFile);
+        FileUtils.checkIfFileExists(eligibilityFile);
+        FileUtils.checkIfFileExists(outputFile);
 
         // import members from members.dat file
         MemberImporterImpl memberImporter = new MemberImporterImpl();
