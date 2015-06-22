@@ -1,11 +1,11 @@
 package com.java.fileparser;
 
-import com.java.fileparser.utils.DateUtils;
-import com.java.fileparser.utils.FileUtils;
+import org.apache.commons.lang3.time.StopWatch;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by raunakshakya on 6/18/15.
@@ -14,88 +14,103 @@ public class JAVAFileParsingExample {
 
     public static void main(String[] args) throws IOException, ParseException {
 
-        // Different ways of creating an Array
-        /*
-        String[] countries = new String[]{"Australia", "New Zealand", "South Africa", "England"};
-        */
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
 
         /*
-        String[] countries = new String[4];
-        countries[0] = "Australia";
-        countries[1] = "New Zealand";
-        countries[2] = "South Africa";
-        countries[3] = "England";
-        */
-
-        /*
-        String[] countries = {"Australia", "New Zealand", "South Africa", "England"};
-        */
-
-        String[] countries = {"Australia", "New Zealand", "South Africa", "England"};
-        int lengthOfArray = countries.length;
-
-        // Printing elements of Array using for loop
-        /*
-        for (int i = 0; i < lengthOfArray; i++) {
-            System.out.println(countries[i]);
+        // external iterator
+        for (int i = 0; i < numbers.size(); i++) {
+            System.out.println(numbers.get(i));
         }
-        */
 
-        // Printing elements of Array using for-each loop
-        for (String a : countries) {
-            System.out.println(a);
+        for (Integer e : numbers) {
+            System.out.println(e);
         }
-        System.out.println();
 
-        // Using ArrayList
-        ArrayList al = new ArrayList();
-        al.add("Australia");
-        al.add("New Zealand");
-        al.add("South Africa");
-        al.add("England");
-        Collections.sort(al);
-        Iterator itr1 = al.iterator();
-        while (itr1.hasNext()) {
-            System.out.println(itr1.next());
-        }
-        System.out.println();
-
-        // Using LinkedHashMap
-        LinkedHashMap hm = new LinkedHashMap();
-        hm.put(100, "Australia");
-        hm.put(101, "New Zealand");
-        hm.put(102, "South Africa");
-        Set set = hm.entrySet();
-        Iterator itr2 = set.iterator();
-        while (itr2.hasNext()) {
-            Map.Entry m = (Map.Entry) itr2.next();
-            System.out.println(m.getKey() + " " + m.getValue());
-        }
-        System.out.println();
-
-        /*
-        MemberFileConverter memberFileConverter = new MemberFileConverter() {
-            @Override
-            public boolean isEligible(Eligibility eligibility) {
-                return DateUtils.isCurrentDateBetweenTwoDates(eligibility.getEffectiveFrom(), eligibility.getEffectiveTo());
+        // internal iterator
+        numbers.forEach(new Consumer<Integer>() {
+            public void accept(Integer value) {
+                System.out.println(value);
             }
-        };
-        memberFileConverter.convert(FileUtils.MEMBERS_FILE, FileUtils.ELIGIBILITIES_FILE, FileUtils.OUTPUT_FILE);
+        });
         */
 
+        // numbers.forEach((Integer value) -> System.out.println(value));
+
+        // numbers.forEach(value -> System.out.println(value));
+
+        // numbers.forEach(System.out::println);
+
+        int result = 0;
         /*
-        // Question from Facebook
-        String r = "0";
-        int x = -1, y = -5;
-        if(x < 5)
-            if(y > 0)
-                if(x > y)
-                    r += "1";
-                else r += "2";
-            else r += "3";
-        else r += "4";
-        System.out.println(r);
+        for (int e : numbers) {
+            result += e * 2;
+        }
+        System.out.println(result);
         */
+/*
+        System.out.println(
+                numbers.stream()
+                        .map(e -> e * 2)
+                        .reduce(0, (c, e) -> c + e));
+*/
+
+        /*
+        for (int e : numbers) {
+            if (e > 3 && e % 2 == 0) {
+                result = e * 2;
+                break;
+            }
+        }
+        System.out.println(result);
+        */
+
+/*
+        System.out.println(
+                numbers.stream()
+                        .filter(e -> e > 3)
+                        .filter(e -> e % 2 == 0)
+                        .map(e -> e * 2)
+                        .findFirst());  // Optional[8] i.e. there are times when no value, may be null
+*/
+
+/*
+        System.out.println(
+                numbers.stream()
+                        .filter(Sample::isGT3)
+                        .filter(Sample::isEven)
+                        .map(Sample::doubleIt)
+                        .findFirst());
+*/
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
+        System.out.println(
+                numbers.stream()
+                        .filter(e -> e > 3)
+                        .filter(e -> e % 2 == 0)
+                        .map(e -> e * 2)
+                        .findFirst());
+
+        stopWatch.stop();
+
+        long timeTaken = stopWatch.getTime();
+        System.out.println(timeTaken);
+    }
+
+    public static boolean isGT3(Integer number) {
+        System.out.println("isGT3 for " + number);
+        return number > 3;
+    }
+
+    public static boolean isEven(Integer number) {
+        System.out.println("isEven for " + number);
+        return number % 2 == 0;
+    }
+
+    public static int doubleIt(Integer number) {
+        System.out.println("doubleIt for " + number);
+        return number * 2;
     }
 
 }
